@@ -2,7 +2,7 @@ import React from "react";
 
 const Controls = ({network,setNetwork, gasLimit, setGasLimit}) => {
   return (
-    <div>
+    <div className="w-full">
       <div
         className="bg-gray-800/80 rounded-lg p-6 shadow mb-6"
         data-aos="fade-right"

@@ -9,7 +9,7 @@ const GasData = ({loading,network,gasLimit,gasData,tokenPrice,fetchGasPrice}) =>
             </p>
           ) : (
             <>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+              <div className="md:flex justify-center gap-8 text-center">
                 <div>
                   <p className="text-cyan-400">Max Fee Per Gas</p>
                   <p className="text-2xl font-bold">

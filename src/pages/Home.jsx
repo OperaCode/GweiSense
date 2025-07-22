@@ -75,7 +75,7 @@ const Home = () => {
       ]);
     } catch (error) {
       console.error("Error fetching gas data:", error);
-      toast.error(
+      toast.info(
         "Failed to fetch gas data. Please check your RPC or network."
       );
     }
@@ -127,7 +127,7 @@ const Home = () => {
         </section>
 
         {/* Controls - select network */}
-        <div className="max-w-3xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+        <div className="max-w-3xl mx-auto gap-8 mb-12">
           <Controls network={network} setNetwork={setNetwork} gasLimit={gasLimit} setGasLimit={setGasLimit} />
         </div>
 
@@ -141,7 +141,7 @@ const Home = () => {
 
         {/* Chart */}
         <div
-          className="max-w-4xl mx-auto bg-gray-800/80 rounded-lg p-8 shadow"
+          className="max-w-3xl mx-auto bg-gray-800/80 rounded-lg p-8 shadow"
           data-aos="fade-up"
         >
             <Chart history={history} gasData={gasData}/>
