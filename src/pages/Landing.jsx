@@ -7,7 +7,7 @@ const Landing = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
-    AOS.init({ duration: 1000, once: true });
+    AOS.init({ duration: 1000 });
   }, []);
 
   return (
