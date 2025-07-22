@@ -1,6 +1,6 @@
 import React from 'react'
 
-const GasData = ({loading,gasLimit,gasData,tokenPrice,fetchGasPrice}) => {
+const GasData = ({loading,network,gasLimit,gasData,tokenPrice,fetchGasPrice}) => {
   return (
     <div>
        {loading ? (

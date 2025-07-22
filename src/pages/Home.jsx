@@ -136,7 +136,7 @@ const Home = () => {
           className="max-w-3xl mx-auto bg-gray-800/80 rounded-lg p-8 mb-12 shadow"
           data-aos="zoom-in"
         >
-          <GasData loading={loading} gasLimit={gasLimit} gasData={gasData} tokenPrice={tokenPrice} fetchGasPrice={fetchGasPrice}/>
+          <GasData network={network} loading={loading} gasLimit={gasLimit} gasData={gasData} tokenPrice={tokenPrice} fetchGasPrice={fetchGasPrice}/>
         </div>
 
         {/* Chart */}
