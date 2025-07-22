@@ -95,7 +95,7 @@ const Home = () => {
       setTokenPrice(data[id].usd);
     } catch (err) {
       console.error("Error fetching token price:", err);
-      toast.error("Failed to fetch token price.");
+      toast.info("Failed to fetch token price.");
     }
   };
 
