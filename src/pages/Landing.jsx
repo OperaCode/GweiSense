@@ -10,9 +10,32 @@ const Landing = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black text-white font-sans">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black text-white font-sans ">
       {/* Navbar */}
-      <Header />
+      <div>
+        {/* <Header /> */}
+        <header className="fixed top-0 border flex justify items-center p-4 px-6 w-full bg-gray-900 bg-opacity-80 backdrop-blur-md z-50">
+                <h1 className="text-2xl font-bold text-cyan-400">GweiSense</h1>
+                <nav className="flex gap-4">
+                  <Link
+                    to="features"
+                    smooth={true}
+                    duration={500}
+                    className="cursor-pointer text-cyan-400 hover:underline"
+                  >
+                    Features
+                  </Link>
+                  <Link
+                    to="how"
+                    smooth={true}
+                    duration={500}
+                    className="cursor-pointer text-cyan-400 hover:underline"
+                  >
+                    How it Works
+                  </Link>
+                </nav>
+              </header>
+      </div>
 
       {/* Hero Section */}
       <section
@@ -153,7 +176,7 @@ const Landing = () => {
 
       {/* Footer */}
       <footer className="text-center py-6 text-gray-500 bg-gray-900 bg-opacity-80">
-      <p className="p-2">  © 2025 GweiSense | Built with ❤️ by Opera.</p>
+        <p className="p-2"> © 2025 GweiSense | Built with ❤️ by Opera.</p>
         <a
           href="https://github.com/OperaCode"
           target="_blank"
