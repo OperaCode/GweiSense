@@ -5,8 +5,8 @@ import { toast } from "react-toastify";
 import { format } from "date-fns";
 
 
-const ANKR_KEY=import.meta.env.VITE_ANKR_KEY;
 
+const ANKR_KEY=import.meta.env.VITE_ANKR_KEY
 
 const Home = () => {
   const [gasData, setGasData] = useState({
@@ -88,106 +88,116 @@ const Home = () => {
   }, [network]);
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center px-4 py-10">
-      <h1 className="text-3xl font-bold mb-6 text-blue-600 animate-fadeIn">
-        GweiSense – Multi-Chain Gas Tracker
-      </h1>
+    <div className="min-h-screen bg-gradient-to-b from-blue-950 via-black to-blue-950 text-white px-4 py-10 font-sans">
+      {/* Header */}
+      <header className="text-center mb-10">
+        <h1 className="text-4xl font-extrabold bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 bg-clip-text text-transparent mb-4">
+          GweiSense – Multi-Chain Gas Tracker
+        </h1>
+        <p className="text-gray-300 max-w-xl mx-auto">
+          Monitor live gas fees across Ethereum, Polygon, and BSC to save costs and optimise transactions.
+        </p>
+      </header>
 
-      <div className="mt-4 w-full max-w-md">
-        <label className="block mb-2 font-medium text-gray-700">Select Network:</label>
-        <select
-          value={network}
-          onChange={(e) => setNetwork(e.target.value)}
-          className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-600"
+      {/* Controls */}
+      <div className="max-w-2xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+        {/* Network Selection */}
+        <div className="bg-white/10 backdrop-blur rounded-lg p-4">
+          <label className="block mb-2 font-medium text-gray-200">Select Network:</label>
+          <select
+            value={network}
+            onChange={(e) => setNetwork(e.target.value)}
+            className="w-full px-4 py-2 rounded bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="ethereum">Ethereum</option>
+            <option value="polygon">Polygon</option>
+            <option value="bsc">Binance Smart Chain</option>
+          </select>
+        </div>
+
+        {/* Gas Limit */}
+        <div className="bg-white/10 backdrop-blur rounded-lg p-4">
+          <label className="block mb-2 font-medium text-gray-200">Enter Gas Limit:</label>
+          <input
+            type="number"
+            value={gasLimit}
+            onChange={(e) => setGasLimit(e.target.value)}
+            className="w-full px-4 py-2 rounded bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="e.g. 21000"
+          />
+          <div className="mt-2 flex flex-wrap gap-2">
+            {[
+              { label: "Transfer (21k)", value: 21000 },
+              { label: "ERC20 Approval (45k)", value: 45000 },
+              { label: "Swap (100k)", value: 100000 },
+            ].map((item) => (
+              <button
+                key={item.label}
+                onClick={() => setGasLimit(item.value)}
+                className="bg-blue-600 px-3 py-1 rounded text-sm hover:bg-blue-700"
+              >
+                {item.label}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Gas Data Display */}
+      <div className="max-w-2xl mx-auto bg-white/10 backdrop-blur rounded-lg p-6 mb-10">
+        {loading ? (
+          <p className="text-gray-300 animate-pulse">Loading gas prices...</p>
+        ) : (
+          <>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+              <div>
+                <p className="text-gray-400">Max Fee Per Gas</p>
+                <p className="text-2xl font-bold">{gasData.maxFeePerGas} gwei</p>
+              </div>
+              <div>
+                <p className="text-gray-400">Priority Fee</p>
+                <p className="text-2xl font-bold">{gasData.maxPriorityFeePerGas} gwei</p>
+              </div>
+              <div>
+                <p className="text-gray-400">Gas Price</p>
+                <p className="text-2xl font-bold">{gasData.gasPrice} gwei</p>
+              </div>
+            </div>
+
+            {gasLimit && gasData.gasPrice && tokenPrice && (
+              <div className="mt-6 text-center">
+                <p className="text-gray-400">Estimated Cost</p>
+                <p className="text-xl font-bold">
+                  {((parseFloat(gasLimit) * parseFloat(gasData.gasPrice)) / 1e9).toFixed(6)}{" "}
+                  {network === "ethereum" ? "ETH" : network === "polygon" ? "MATIC" : "BNB"} (~$
+                  {(
+                    ((parseFloat(gasLimit) * parseFloat(gasData.gasPrice)) / 1e9) *
+                    tokenPrice
+                  ).toFixed(2)}
+                  )
+                </p>
+              </div>
+            )}
+          </>
+        )}
+
+        <button
+          onClick={fetchGasPrice}
+          className="mt-6 bg-gradient-to-r from-purple-600 to-blue-600 px-4 py-2 rounded shadow hover:from-purple-700 hover:to-blue-700 transition transform hover:scale-105"
         >
-          <option value="ethereum">Ethereum</option>
-          <option value="polygon">Polygon</option>
-          <option value="bsc">Binance Smart Chain</option>
-        </select>
+          Refresh Data
+        </button>
       </div>
 
-      <div className="mt-6 w-full max-w-md">
-        <label className="block mb-2 font-medium text-gray-700">Enter Gas Limit:</label>
-        <input
-          type="number"
-          value={gasLimit}
-          onChange={(e) => setGasLimit(e.target.value)}
-          className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-600"
-          placeholder="e.g. 21000"
-        />
-        <div className="mt-2 flex space-x-2">
-          {[
-            { label: "Transfer (21k)", value: 21000 },
-            { label: "ERC20 Approval (45k)", value: 45000 },
-            { label: "Swap (100k)", value: 100000 },
-          ].map((item) => (
-            <button
-              key={item.label}
-              onClick={() => setGasLimit(item.value)}
-              className="bg-gray-200 px-3 py-1 rounded hover:bg-gray-300 text-sm"
-            >
-              {item.label}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {gasLimit && gasData.gasPrice && tokenPrice && (
-        <div className="mt-4 bg-white rounded-lg shadow p-4">
-          <p className="text-gray-700">
-            <strong>Estimated Cost:</strong>{" "}
-            {((parseFloat(gasLimit) * parseFloat(gasData.gasPrice)) / 1e9).toFixed(6)}{" "}
-            {network === "ethereum" ? "ETH" : network === "polygon" ? "MATIC" : "BNB"} (~$
-            {(
-              ((parseFloat(gasLimit) * parseFloat(gasData.gasPrice)) / 1e9) *
-              tokenPrice
-            ).toFixed(2)}
-            )
-          </p>
-        </div>
-      )}
-
-      <div className="mt-6 w-full max-w-md">
-        <label className="block mb-2 font-medium text-gray-700">Set Gas Price Alert Threshold (gwei):</label>
-        <input
-          type="number"
-          value={threshold}
-          onChange={(e) => setThreshold(e.target.value)}
-          className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-600"
-          placeholder="e.g. 30"
-        />
-      </div>
-
-      {loading ? (
-        <p className="text-gray-600 animate-pulse">Loading gas prices...</p>
-      ) : (
-        <div className="bg-white rounded-lg shadow p-6 w-full max-w-md animate-slideUp">
-          <p className="text-gray-700"><strong>Max Fee Per Gas:</strong> {gasData.maxFeePerGas} gwei</p>
-          <p className="text-gray-700"><strong>Max Priority Fee:</strong> {gasData.maxPriorityFeePerGas} gwei</p>
-          <p className="text-gray-700"><strong>Gas Price:</strong> {gasData.gasPrice} gwei</p>
-        </div>
-      )}
-
-      <button
-        onClick={fetchGasPrice}
-        className="mt-6 bg-blue-600 text-white px-4 py-2 rounded shadow hover:bg-blue-700 transition transform hover:scale-105"
-      >
-        Refresh
-      </button>
-
-      <div className="w-full max-w-2xl mt-10 bg-white rounded-lg shadow p-4">
-        <h2 className="text-xl font-bold mb-4">Gas Price History</h2>
+      {/* Chart */}
+      <div className="max-w-4xl mx-auto bg-white/10 backdrop-blur rounded-lg p-6">
+        <h2 className="text-2xl font-bold mb-4 text-center">Gas Price History</h2>
         <ResponsiveContainer width="100%" height={300}>
           <LineChart data={history}>
-            <XAxis dataKey="time" />
-            <YAxis domain={["auto", "auto"]} unit=" gwei" />
+            <XAxis dataKey="time" stroke="#cbd5e1" />
+            <YAxis domain={["auto", "auto"]} unit=" gwei" stroke="#cbd5e1" />
             <Tooltip />
-            <Line
-              type="monotone"
-              dataKey="gasPrice"
-              stroke="#3b82f6"
-              strokeWidth={2}
-            />
+            <Line type="monotone" dataKey="gasPrice" stroke="#3b82f6" strokeWidth={2} />
           </LineChart>
         </ResponsiveContainer>
       </div>
